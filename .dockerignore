@@ -1,0 +1,16 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+*.egg
+build/
+install/
+log/
+.cache/
+.pytest_cache
+.DS_Store
+Thumbs.db
+*.log

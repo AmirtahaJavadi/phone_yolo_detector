@@ -1,0 +1,29 @@
+# docker-compose.gpu.yml  (override file)
+# Merges on top of docker-compose.yml to switch to the CUDA-enabled image and
+# enable NVIDIA GPU passthrough.
+#
+# Usage:
+#   xhost +local:docker
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml build
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml run --rm ros2 bash
+#
+# Host prerequisites:
+#   sudo apt install -y nvidia-container-toolkit
+#   sudo nvidia-ctk runtime configure --runtime=docker
+#   sudo systemctl restart docker
+
+services:
+  ros2:
+    build:
+      dockerfile: Dockerfile.gpu
+    image: phone-yolo-humble-gpu:latest
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, compute, utility, graphics]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics
